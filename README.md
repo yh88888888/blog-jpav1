@@ -2,6 +2,7 @@
 
 > Get, Post 만 사용!! (x-www-form)
 > ajax만 json으로
+> ORM
 
 ## 1. 유저 (user_tb)
 
