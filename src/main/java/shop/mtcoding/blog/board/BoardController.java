@@ -1,5 +1,6 @@
 package shop.mtcoding.blog.board;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -14,7 +15,8 @@ public class BoardController {
     private final HttpSession session;
 
     @GetMapping("/")
-    public String list() {
+    public String list(HttpServletRequest request) {
+        request.setAttribute("models", boardService.글목록보기());
         return "board/list";
     }
 
