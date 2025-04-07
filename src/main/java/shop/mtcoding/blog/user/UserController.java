@@ -48,10 +48,9 @@ public class UserController {
         session.setAttribute("sessionUser", sessionUser);
 
         if (loginDTO.getRememberMe() == null) {
-
-            Cookie cookie = new Cookie("username", null); // 값은 null로
-            cookie.setMaxAge(0); // 0초 = 즉시 만료
-            response.addCookie(cookie); // 클라이언트에 다시 전달해서 삭제
+            Cookie cookie = new Cookie("username", null);
+            cookie.setMaxAge(0); // 즉시 만료
+            response.addCookie(cookie);
         } else {
             Cookie cookie = new Cookie("username", loginDTO.getUsername());
             cookie.setMaxAge(60 * 60 * 24 * 7);
@@ -64,6 +63,6 @@ public class UserController {
     @GetMapping("/logout")
     public String logout() {
         session.invalidate();
-        return "redirect:/";
+        return "redirect:/login-form";
     }
 }
