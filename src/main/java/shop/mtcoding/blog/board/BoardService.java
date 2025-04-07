@@ -25,4 +25,10 @@ public class BoardService {
         Board board = saveDTO.toEntity(sessionUser);
         boardRepository.save(board);
     }
+
+    public BoardResponse.DetailDTO 글상세보기(Integer id, Integer userId) {
+        Board board = boardRepository.findByIdJoinUser(id);
+        BoardResponse.DetailDTO detailDTO = new BoardResponse.DetailDTO(board, userId);
+        return detailDTO;
+    }
 }
