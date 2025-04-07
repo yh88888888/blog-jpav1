@@ -13,7 +13,15 @@ public class BoardRepository {
     private final EntityManager em;
 
     public List<Board> findAll() {
-        Query query = em.createQuery("select b from Board b where b.isPublic = true order by b.id desc", Board.class);
+        String sql = "select b from Board b where b.isPublic = true order by b.id desc";
+        Query query = em.createQuery(sql, Board.class);
+        return query.getResultList();
+    }
+
+    public List<Board> findAll(Integer userId) {
+        String sql = "select b from Board b where b.isPublic = true or b.user.id = :userId order by b.id desc";
+        Query query = em.createQuery(sql, Board.class);
+        query.setParameter("userId", userId);
         return query.getResultList();
     }
 
