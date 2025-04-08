@@ -27,10 +27,12 @@
     <!-- AJAX 좋아요 영역 -->
     <div class="my-3 d-flex align-items-center">
         {{#model.isLove}}
-            <i id="likeIcon" class="fa fa-heart" style="font-size:20px; color:red" onclick="likeToggle()"></i>
+            <i id="likeIcon" class="fa fa-heart" style="font-size:20px; color:red"
+               onclick="deleteLove({{model.loveId}})"></i>
         {{/model.isLove}}
         {{^model.isLove}}
-            <i id="likeIcon" class="fa fa-heart" style="font-size:20px; color:black" onclick="likeToggle()"></i>
+            <i id="likeIcon" class="fa fa-heart" style="font-size:20px; color:black"
+               onclick="saveLove()"></i>
         {{/model.isLove}}
         <span class="ms-1"><b id="likeCount">{{model.loveCount}}</b>명이 이 글을 좋아합니다</span>
     </div>
@@ -77,18 +79,37 @@
 </div>
 
 <script>
-    let liked = false; // 처음엔 좋아요 상태라고 가정
+    let boardId = {{model.id}};
 
-    function likeToggle() {
+    async function saveLove() {
+        let requestBody = {boardId: boardId};
+        let response = await fetch(`/love`, {
+            method: "POST",
+            body: JSON.stringify(requestBody),
+            headers: {"Content-Type": "application/json"}
+        });
+        let responseBody = await response.json(); // { loveId, loveCount }
+
+        // DOM 업데이트
         let icon = document.querySelector('#likeIcon');
+        let likeCountSpan = document.querySelector('#likeCount');
+        icon.style.color = 'red';
+        icon.setAttribute('onclick', `deleteLove(${responseBody.loveId})`);
+        likeCountSpan.textContent = responseBody.loveCount;
+    }
 
-        if (liked) {
-            icon.style.color = 'black';
-        } else {
-            icon.style.color = 'red';
-        }
+    async function deleteLove(loveId) {
+        let response = await fetch(`/love/${loveId}`, {
+            method: "DELETE"
+        });
+        let responseBody = await response.json(); // { loveCount }
 
-        liked = !liked;
+        // DOM 업데이트
+        let icon = document.querySelector('#likeIcon');
+        let likeCountSpan = document.querySelector('#likeCount');
+        icon.style.color = 'black';
+        icon.setAttribute('onclick', `saveLove()`);
+        likeCountSpan.textContent = responseBody.loveCount;
     }
 </script>
 
