@@ -34,10 +34,10 @@ public class UserController {
         if (sessionUser == null) throw new RuntimeException("인증이 필요합니다");
 
         // update user_tb set password = ?, email = ? where id = ?
-        User user = userService.회원정보수정(updateDTO, sessionUser.getId());
+        User userPS = userService.회원정보수정(updateDTO, sessionUser.getId());
 
         // 세션 동기화
-        session.setAttribute("sessionUser", user);
+        session.setAttribute("sessionUser", userPS);
 
         return "redirect:/";
     }
