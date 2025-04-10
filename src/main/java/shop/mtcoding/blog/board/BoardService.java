@@ -31,8 +31,10 @@ public class BoardService {
         boardRepository.save(board);
     }
 
+    @Transactional
     public BoardResponse.DetailDTO 글상세보기(Integer id, Integer userId) {
-        Board board = boardRepository.findByIdJoinUserAndReplies(id);
+        Board boardPS = boardRepository.findByIdJoinUserAndReplies(id);
+
 
         Love love = loveRepository.findByUserIdAndBoardId(userId, id);
         Long loveCount = loveRepository.findByBoardId(id);
@@ -40,7 +42,7 @@ public class BoardService {
         Integer loveId = love == null ? null : love.getId();
         Boolean isLove = love == null ? false : true;
 
-        BoardResponse.DetailDTO detailDTO = new BoardResponse.DetailDTO(board, userId, isLove, loveCount.intValue(), loveId);
+        BoardResponse.DetailDTO detailDTO = new BoardResponse.DetailDTO(boardPS, userId, isLove, loveCount.intValue(), loveId);
         return detailDTO;
     }
 }
