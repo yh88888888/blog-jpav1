@@ -17,6 +17,14 @@ public class BoardService {
     private final LoveRepository loveRepository;
     private final ReplyRepository replyRepository;
 
+    // TODO 과제1
+    public void 글수정하기() {
+    }
+
+    // TODO 과제2
+    public void 글삭제() {
+    }
+
     public List<Board> 글목록보기(Integer userId) {
         if (userId == null) {
             return boardRepository.findAll();
