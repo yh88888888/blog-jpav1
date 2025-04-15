@@ -44,4 +44,13 @@ public class BoardRepository {
     public void save(Board board) {
         em.persist(board);
     }
+
+    public void insert(String title, String content) {
+    }
+
+    public void update(int id, String title, String content) {
+    }
+
+    public void deleteById(int idNo1) {
+    }
 }

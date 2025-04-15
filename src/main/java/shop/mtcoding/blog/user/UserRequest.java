@@ -34,3 +34,5 @@ public class UserRequest {
         private String rememberMe; // check되면 on, 안되면 null
     }
 }
+
+
