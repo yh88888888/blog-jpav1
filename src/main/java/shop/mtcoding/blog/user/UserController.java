@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import shop.mtcoding.blog._core.error.anno.MyAfter;
+import shop.mtcoding.blog._core.error.anno.MyAround;
+import shop.mtcoding.blog._core.error.anno.MyBefore;
 import shop.mtcoding.blog._core.error.ex.Exception400;
 import shop.mtcoding.blog._core.util.Resp;
 
@@ -24,6 +27,13 @@ import java.util.regex.Pattern;
 public class UserController {
     private final UserService userService;
     private final HttpSession session;
+
+    @MyAround
+    @GetMapping("/v2/around")
+    public @ResponseBody String around() {
+        return "good";
+    }
+
 
     // ViewResolver -> prefix = /templates/ -> suffix = .mustache
     @GetMapping("/user/update-form")
@@ -47,30 +57,33 @@ public class UserController {
         return Resp.ok(dto);
     }
 
+    @MyBefore
     @GetMapping("/join-form")
     public String joinForm() {
+        System.out.println("joinForm 호출됨");
         return "user/join-form";
     }
 
+    @MyAfter
     @PostMapping("/join")
     public String join(@Valid UserRequest.JoinDTO joinDTO, Errors errors)//@Valid 어노테이션을 붙이면
-    {
-        if(errors.hasErrors()){
+    {         System.out.println("joinForm 호출됨");
+        if (errors.hasErrors()) {
             List<FieldError> fErrors = errors.getFieldErrors();
-            for(FieldError fieldError : fErrors){
+            for (FieldError fieldError : fErrors) {
                 throw new Exception400(fieldError.getField() + ":" + fieldError.getDefaultMessage());
             }
         }
 
 
-         유효성 검사
-        boolean r1 = Pattern.matches("^[a-zA-Z0-9]{2,20}$", joinDTO.getUsername());
-        boolean r2 = Pattern.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()])[a-zA-Z\\d!@#$%^&*()]{6,20}$", joinDTO.getPassword());
-        boolean r3 = Pattern.matches("^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\\.[a-zA-Z]{2,3}$", joinDTO.getEmail());
-
-        if (!r1) throw new Exception400("유저네임은 2-20자이며, 특수문자,한글이 포함될 수 없습니다");
-        if (!r2) throw new Exception400("패스워드는 4-20자이며, 특수문자,영어 대문자,소문자, 숫자가 포함되어야 하며, 공백이 있을 수 없습니다");
-        if (!r3) throw new Exception400("이메일 형식에 맞게 적어주세요");
+//         유효성 검사
+//        boolean r1 = Pattern.matches("^[a-zA-Z0-9]{2,20}$", joinDTO.getUsername());
+//        boolean r2 = Pattern.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()])[a-zA-Z\\d!@#$%^&*()]{6,20}$", joinDTO.getPassword());
+//        boolean r3 = Pattern.matches("^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\\.[a-zA-Z]{2,3}$", joinDTO.getEmail());
+//
+//        if (!r1) throw new Exception400("유저네임은 2-20자이며, 특수문자,한글이 포함될 수 없습니다");
+//        if (!r2) throw new Exception400("패스워드는 4-20자이며, 특수문자,영어 대문자,소문자, 숫자가 포함되어야 하며, 공백이 있을 수 없습니다");
+//        if (!r3) throw new Exception400("이메일 형식에 맞게 적어주세요");
         userService.회원가입(joinDTO);
         return "redirect:/login-form";
     }
@@ -83,9 +96,9 @@ public class UserController {
     @PostMapping("/login")
     public String login(@Valid UserRequest.LoginDTO loginDTO, Errors errors, HttpServletResponse response) {
         //System.out.println(loginDTO);
-        if(errors.hasErrors()){
+        if (errors.hasErrors()) {
             List<FieldError> fErrors = errors.getFieldErrors();
-            for(FieldError fieldError : fErrors){
+            for (FieldError fieldError : fErrors) {
                 throw new Exception400(fieldError.getField() + ":" + fieldError.getDefaultMessage());
             }
         }
