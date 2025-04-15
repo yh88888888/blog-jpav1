@@ -32,7 +32,7 @@ public class GlobalValidationHandler {
             Object result = jp.proceed(); //컨트롤러 함수가 호출, Before와 After는 안됨
             //Before와 After 사이에서 호출되며 어떤값이 리턴될지 알 수 없으므로 Object가 된다.
             System.out.println("Around Advice 직후: " + name);
-            System.out.println("result 값: " + result.);
+            System.out.println("result 값: " + result);
             return result;
         } catch (Throwable e) {
             throw new RuntimeException(e);
