@@ -1,8 +1,17 @@
 package shop.mtcoding.blog.user;
 
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 public class UserRequest {
+    @Pattern(regexp = "^[a-zA-Z0-9]{2,20}$", message = "유저네임은 2-20자이며, 특수문자,한글이 포함될 수 없습니다") // "" 들어가면 ////이렇게 붙음
+    private String username;
+    @Size(min=4, max=20)
+    private String password;
+
+    @Pattern(regexp = "^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\\.[a-zA-Z]{2,3}$",message="이메일 형식에 맞게 적어주세요")
+    private String  email;
 
     @Data
     public static class UpdateDTO {
