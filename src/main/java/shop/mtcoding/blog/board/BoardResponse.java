@@ -13,13 +13,30 @@ public class BoardResponse {
         private List<Board> boards;
         private Integer prev;
         private Integer next;
-        private boolean isFirst;
-        private boolean isLast;
+        private Integer current;
+        private Integer size;
+        private Integer totalCount;
+        private Integer totalPages;
+        private boolean isFirst; //current page
+        private boolean isLast;// totalCount- 그룹함수로 카운트 쳐야 한다., size=3, totalPage==current
+        private List<Integer> numbers;  // 20개 [1,2,3,4,5,6,7] → model.numbers → {{.}}
 
-        public DTO(List<Board> boards, Integer prev, Integer next) {
+        public DTO(List<Board> boards, Integer current, Integer totalCount) {
             this.boards = boards;
-            this.prev = prev;
-            this.next = next;
+            this.prev = current - 1;
+            this.next = current + 1;
+            this.size = 3;
+            this.totalCount = totalCount;
+            this.totalPages = makeTotalPage(totalCount, size);
+            this.isFirst = current <= 0;
+            this.isLast = (totalPages-1)==current;
+
+        }
+
+        private Integer makeTotalPage(int totlaCount, int size) {
+            int rest = totlaCount % size > 0 ? 1 : 0;
+//            int page = totlaCount % size==0?totlaCount/size:totlaCount/size+1;
+            return totalCount / size + rest;
         }
     }
 

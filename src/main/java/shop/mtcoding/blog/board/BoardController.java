@@ -47,6 +47,8 @@ public class BoardController {
         return "board/detail";
     }
 
+    //로그인 안했을 때 DTO가 잘 만들어졌는지 확인하는 방법 JSON으로 바로 던짐
+
     @GetMapping("/")
     public String list(HttpServletRequest request, @RequestParam(required = false, value = "page", defaultValue = "0") Integer page) {
         User sessionUser = (User) session.getAttribute("sessionUser");
@@ -56,7 +58,6 @@ public class BoardController {
         } else {
             request.setAttribute("model", boardService.글목록보기(sessionUser.getId(), page));
         }
-
         return "board/list";
     }
 
