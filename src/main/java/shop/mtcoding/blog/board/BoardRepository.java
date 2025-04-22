@@ -32,14 +32,14 @@ public class BoardRepository {
     // 2.1 로그인 했을 때 →
     // 2.2 로그인 했을 때 →
 
-   public Long totalCount() {
+    public Long totalCount() {
         Query query = em.createQuery("select count(b) from Board b where b.isPublic = true", Long.class);
-               return (Long)query.getSingleResult();
-   }
+        return (Long) query.getSingleResult();
+    }
 
     public Long totalCount(int userId) {
         Query query = em.createQuery("select count(b) from Board b where b.isPublic = true or b.user.id = :userId", Long.class);
-        return (Long)query.getSingleResult();
+        return (Long) query.getSingleResult();
     }
 
     // locahost:8080?page=0

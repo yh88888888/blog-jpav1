@@ -16,7 +16,7 @@ public class BoardResponse {
         private Integer current;
         private Integer size;
         private Integer totalCount;
-        private Integer totalPages;
+        private Integer totalPage;
         private boolean isFirst; //current page
         private boolean isLast;// totalCount- 그룹함수로 카운트 쳐야 한다., size=3, totalPage==current
         private List<Integer> numbers;  // 20개 [1,2,3,4,5,6,7] → model.numbers → {{.}}
@@ -27,9 +27,10 @@ public class BoardResponse {
             this.next = current + 1;
             this.size = 3;
             this.totalCount = totalCount;
-            this.totalPages = makeTotalPage(totalCount, size);
+            this.totalPage = makeTotalPage(totalCount, size);
             this.isFirst = current <= 0;
-            this.isLast = (totalPages-1)==current;
+            this.isLast = (totalPage-1)==current;
+            this.numbers = makeNumbers(current, totalPage);
 
         }
 
@@ -37,6 +38,18 @@ public class BoardResponse {
             int rest = totlaCount % size > 0 ? 1 : 0;
 //            int page = totlaCount % size==0?totlaCount/size:totlaCount/size+1;
             return totalCount / size + rest;
+        }
+
+        private List<Integer> makeNumbers(int current, int totalPage) {
+            List<Integer> numbers = new ArrayList<>();
+            int start = (current / 5) * 5;
+            int end = Math.min(start + 5, totalPage);
+
+            for (int i = start; i < end; i++) {
+                numbers.add(i);
+            }
+
+            return numbers;
         }
     }
 
